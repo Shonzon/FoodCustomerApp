@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -20,6 +21,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class SignUp extends AppCompatActivity {
 
+    TextView alreadyHaveaccount;
     FloatingActionButton camera_floating;
     CircleImageView selectImage;
     Uri filePathUri;
@@ -40,6 +42,7 @@ public class SignUp extends AppCompatActivity {
         });
 
 
+        alreadyHaveaccount=(TextView)findViewById(R.id.already_have_account);
         camera_floating=(FloatingActionButton) findViewById(R.id.floating_camera_button);
         selectImage=(CircleImageView) findViewById(R.id.selectedImage);
 
@@ -52,6 +55,16 @@ public class SignUp extends AppCompatActivity {
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(Intent.createChooser(intent,
                         "Select Picture"), RESULT_LOAD_IMAGE);
+            }
+        });
+
+        alreadyHaveaccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(SignUp.this,Login.class);
+                i.addFlags(i.FLAG_ACTIVITY_CLEAR_TOP | i.FLAG_ACTIVITY_CLEAR_TASK |i.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(i);
+                overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
             }
         });
 
