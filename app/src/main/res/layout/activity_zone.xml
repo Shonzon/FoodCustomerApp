@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Zone">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_custom"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:navigationIcon="?attr/homeAsUpIndicator"
+        android:theme="@style/ToolbarColoredBackArrow"
+        app:popupTheme="@style/AppTheme"
+        app:titleTextColor="@color/md_backgr_app">
+
+        <TextView
+            android:paddingStart="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cart"
+            android:id="@+id/toolbar_title"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            />
+    </androidx.appcompat.widget.Toolbar>
+
+    <LinearLayout
+        android:background="#000000"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:gravity="center"
+            android:textSize="22dp"
+            android:textStyle="bold"
+            android:text="Select your Zone"
+            android:textColor="@color/md_backgr_app"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></TextView>
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="#FFFFFF" />
+
+        <RadioGroup
+            android:layout_margin="40dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <RadioButton
+                android:buttonTint="@color/md_backgr_app"
+                android:textSize="20dp"
+                android:textColor="@color/md_backgr_app"
+                android:text="Basundhara"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </RadioButton>
+            <RadioButton
+                android:buttonTint="@color/md_backgr_app"
+                android:textSize="20dp"
+                android:textColor="@color/md_backgr_app"
+                android:text="Mirpur"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </RadioButton>
+            <RadioButton
+                android:buttonTint="@color/md_backgr_app"
+                android:textSize="20dp"
+                android:textColor="@color/md_backgr_app"
+                android:text="Utara"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </RadioButton>
+        </RadioGroup>
+    </LinearLayout>
+
+</LinearLayout>

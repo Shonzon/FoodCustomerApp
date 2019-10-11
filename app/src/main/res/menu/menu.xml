@@ -4,7 +4,6 @@
         android:id="@+id/navigation_profile"
         android:icon="@drawable/profile"
         android:title="Profile" />
-
     <item
         android:id="@+id/navigation_offer"
         android:icon="@drawable/offer"
@@ -21,6 +20,6 @@
 
     <item
         android:id="@+id/navigation_zone"
-        android:icon="@drawable/home"
+        android:icon="@drawable/marker"
         android:title="Zone" />
 </menu>

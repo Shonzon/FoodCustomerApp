@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "878700772097",
+    "firebase_url": "https://food-maker-47c9d.firebaseio.com",
+    "project_id": "food-maker-47c9d",
+    "storage_bucket": "food-maker-47c9d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:878700772097:android:1a5f995bbe1f9243f7b900",
+        "android_client_info": {
+          "package_name": "com.example.foodcustomerapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "878700772097-n1te08r43sh4q2u09mpb8d61vtnkuis3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAMN0-hL_AZNoJVLb1APZSIHyV7J9sH8XU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "878700772097-n1te08r43sh4q2u09mpb8d61vtnkuis3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
