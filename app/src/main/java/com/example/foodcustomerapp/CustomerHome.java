@@ -66,7 +66,7 @@ public class CustomerHome extends AppCompatActivity {
         myFab = (FloatingActionButton) findViewById(R.id.floating_button);
         myFab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent i = new Intent(CustomerHome.this, FoodOrder.class);
+                Intent i = new Intent(CustomerHome.this, Zone.class);
                 i.addFlags(i.FLAG_ACTIVITY_CLEAR_TOP | i.FLAG_ACTIVITY_CLEAR_TASK |i.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(i);
                 overridePendingTransition(R.anim.slide_in, R.anim.slide_out);

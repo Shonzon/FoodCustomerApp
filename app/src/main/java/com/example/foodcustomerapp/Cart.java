@@ -15,6 +15,8 @@ import android.widget.TextView;
 import com.example.foodcustomerapp.Adapter.FoodItemAdapter;
 import com.example.foodcustomerapp.Model.FoodItemModel;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 public class Cart extends AppCompatActivity implements FoodItemAdapter.OnAdapterItemClickListener {
@@ -22,6 +24,7 @@ public class Cart extends AppCompatActivity implements FoodItemAdapter.OnAdapter
     private RecyclerView recyclerView;
     FoodItemAdapter foodItemAdapter;
     TextView total_taka;
+    TextView current_date;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +39,11 @@ public class Cart extends AppCompatActivity implements FoodItemAdapter.OnAdapter
         });
         recyclerView = (RecyclerView) findViewById(R.id.recycle_view);
         total_taka = (TextView) findViewById(R.id.total_taka);
+        current_date = (TextView) findViewById(R.id.current_date);
+
+
+        Calendar calendar = Calendar.getInstance();
+        current_date.setText(new SimpleDateFormat("dd-MMM-yyyy").format(calendar.getTime()));
 
         loadRecycleView(CustomerHome.foodItemModels);
         foodItemAdapter.setMlistener(this);
@@ -52,7 +60,7 @@ public class Cart extends AppCompatActivity implements FoodItemAdapter.OnAdapter
             recyclerView.setItemAnimator(null);
             recyclerView.scrollToPosition(0);
             foodItemAdapter.notifyDataSetChanged();
-            total_taka.setText(getTotal_Taka(tlist));
+            total_taka.setText(getTotal_Taka(tlist)+" Tk");
         }else {
 
         }
@@ -79,7 +87,7 @@ public class Cart extends AppCompatActivity implements FoodItemAdapter.OnAdapter
     }
     public void removeAt(int position) {
         CustomerHome.foodItemModels.remove(position);
-        total_taka.setText(getTotal_Taka(CustomerHome.foodItemModels));
+        total_taka.setText(getTotal_Taka(CustomerHome.foodItemModels)+" Tk");
         foodItemAdapter.notifyItemRemoved(position);
         foodItemAdapter.notifyItemRangeChanged(position, CustomerHome.foodItemModels.size());
 

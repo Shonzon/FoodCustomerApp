@@ -7,12 +7,15 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TableLayout;
@@ -37,6 +40,7 @@ public class FoodOrder extends AppCompatActivity implements CompoundButton.OnChe
     TableLayout foodlayout;
     Button confirmButton;
     CheckBox[] checkBoxes;
+    String zoneName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +55,7 @@ public class FoodOrder extends AppCompatActivity implements CompoundButton.OnChe
             }
         });
 
+        zoneName=getIntent().getStringExtra("zoneName");
         foodlayout=(TableLayout)findViewById(R.id.foodLayout);
         confirmButton=(Button)findViewById(R.id.button_confirm);
         checkBoxes=new CheckBox[foodItem.length];
@@ -95,8 +100,10 @@ public class FoodOrder extends AppCompatActivity implements CompoundButton.OnChe
             }
 
             TableRow tableRow = new TableRow(getApplicationContext());
-            TableRow.LayoutParams layoutParams = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,TableRow.LayoutParams.MATCH_PARENT);
-            tableRow.setLayoutParams(layoutParams);
+            TableLayout.LayoutParams tableRowParams= new TableLayout.LayoutParams
+                            (TableLayout.LayoutParams.FILL_PARENT,TableLayout.LayoutParams.WRAP_CONTENT);
+            tableRowParams.setMargins(20, 10, 10, 10);
+            tableRow.setLayoutParams(tableRowParams);
 
             checkBoxes[i]= new CheckBox(getApplicationContext());
             checkBoxes[i].setText(foodItem[i][0]);
@@ -106,11 +113,15 @@ public class FoodOrder extends AppCompatActivity implements CompoundButton.OnChe
             checkBoxes[i].setOnCheckedChangeListener(this);
             tableRow.addView(checkBoxes[i],0);
 
+            ImageView imageView=new ImageView(getApplicationContext());
+            imageView.setImageResource(R.drawable.rice);
+            tableRow.addView(imageView,1);
+
             TextView textView = new TextView(getApplicationContext());
             textView.setText(foodItem[i][1]+" Tk");
             textView.setPadding(50,0,0,0);
             textView.setTextColor(Color.WHITE);
-            tableRow.addView(textView, 1);
+            tableRow.addView(textView, 2);
 
             foodlayout.addView(tableRow);
         }

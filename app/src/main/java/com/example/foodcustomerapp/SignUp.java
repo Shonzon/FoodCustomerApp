@@ -5,8 +5,11 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -23,6 +26,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.example.foodcustomerapp.Helper.NetworkInformation;
 import com.example.foodcustomerapp.Model.UserModel;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -164,16 +168,24 @@ public class SignUp extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (validation()!=null){
-                    isCheckEmail(userEmail.getText().toString().trim(), new OnEmailCheckListener() {
-                        @Override
-                        public void onSucess(boolean isRegistered) {
-                            if(isRegistered){
-                                Snackbar.make(registeractivity,"User Already Exists With This Email",Snackbar.LENGTH_LONG).show();
-                            } else {
-                                userRegistration(validation());
+                    if (NetworkInformation.isConnected(getApplicationContext())){
+                        progressDoalog.show();
+                        isCheckEmail(userEmail.getText().toString().trim(), new OnEmailCheckListener() {
+                            @Override
+                            public void onSucess(boolean isRegistered) {
+                                if(isRegistered){
+                                    progressDoalog.dismiss();
+                                    Snackbar.make(registeractivity,"User Already Exists With This Email",Snackbar.LENGTH_LONG).show();
+                                } else {
+                                    userRegistration(validation());
+                                }
                             }
-                        }
-                    });
+                        });
+                    }else {
+                        dialogAlert("No Network Connection");
+                    }
+
+
                 }
             }
         });
@@ -192,7 +204,7 @@ public class SignUp extends AppCompatActivity {
         } else if (TextUtils.isEmpty(userPassword.getText().toString().trim())){
             userPassword.setError( "Password  is required!" );
         } else if (TextUtils.isEmpty(userConfirmPassword.getText().toString().trim())){
-            userName.setError( "Confirm Password  is required!" );
+            userConfirmPassword.setError( "Confirm Password  is required!" );
         }else if (!isEmailValid(userEmail.getText().toString().trim())){
             userEmail.setError( "Use a valid email address" );
         }else if (!userPassword.getText().toString().trim().equals(userConfirmPassword.getText().toString().trim())){
@@ -221,7 +233,6 @@ public class SignUp extends AppCompatActivity {
     }
 
     private void userRegistration(final UserModel userModel){
-        progressDoalog.show();
         mAuth.createUserWithEmailAndPassword(userModel.getUserEmail(), userModel.getUserPassword())
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -305,6 +316,19 @@ public class SignUp extends AppCompatActivity {
                 listener.onSucess(check);
             }
         });
+    }
+
+    public  void dialogAlert(String message){
+        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setTitle(" --ALERT-- ");
+        alertDialog.setMessage(message);
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.show();
     }
 
 }

@@ -51,6 +51,7 @@
             android:background="#FFFFFF" />
 
         <RadioGroup
+            android:id="@+id/zone_radio_group"
             android:layout_margin="40dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -78,6 +79,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
             </RadioButton>
+            <RadioButton
+                android:buttonTint="@color/md_backgr_app"
+                android:textSize="20dp"
+                android:textColor="@color/md_backgr_app"
+                android:text="Dhanmondi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"></RadioButton>
+            <RadioButton
+                android:buttonTint="@color/md_backgr_app"
+                android:textSize="20dp"
+                android:textColor="@color/md_backgr_app"
+                android:text="Mahakhali"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"></RadioButton>
         </RadioGroup>
     </LinearLayout>
 
