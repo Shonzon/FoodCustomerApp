@@ -84,26 +84,22 @@ public class Login extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(Login.this,CustomerHome.class);
-                i.addFlags(i.FLAG_ACTIVITY_CLEAR_TOP | i.FLAG_ACTIVITY_CLEAR_TASK |i.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(i);
-                overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
-//                String email=userEmail.getText().toString().trim();
-//                String password=userPassword.getText().toString().trim();
-//                if (TextUtils.isEmpty(email)){
-//                    userEmail.setError( "User Email is required!" );
-//                } else if (TextUtils.isEmpty(password)){
-//                    userPassword.setError( "User Email is required!" );
-//                } else if (!SignUp.isEmailValid(email)){
-//                    userEmail.setError( "Use a valid email address" );
-//                } else {
-//                    if (NetworkInformation.isConnected(getApplicationContext())){
-//                        progressDoalog.show();
-//                       userLoginByfirebase(email,password);
-//                    }else {
-//                        dialogAlert("No Network Connection");
-//                    }
-//                }
+
+                String email=userEmail.getText().toString().trim();
+                String password=userPassword.getText().toString().trim();
+                if (TextUtils.isEmpty(email)){
+                    userEmail.setError( "User Email is required!" );
+                } else if (TextUtils.isEmpty(password)){
+                    userPassword.setError( "User Email is required!" );
+                } else if (!SignUp.isEmailValid(email)){
+                    userEmail.setError( "Use a valid email address" );
+                } else {
+                    if (NetworkInformation.isConnected(getApplicationContext())){
+                       userLoginByfirebase(email,password);
+                    }else {
+                        dialogAlert("No Network Connection");
+                    }
+                }
             }
         });
         registertextview.setOnClickListener(new View.OnClickListener() {
@@ -118,6 +114,7 @@ public class Login extends AppCompatActivity {
     }
 
     private void userLoginByfirebase(String email, final String password){
+        progressDoalog.show();
         mAuth.signInWithEmailAndPassword(email, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
             public void onSuccess(AuthResult authResult) {

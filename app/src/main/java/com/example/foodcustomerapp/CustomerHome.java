@@ -18,7 +18,7 @@ import java.util.List;
 public class CustomerHome extends AppCompatActivity {
 
     FloatingActionButton myFab;
-    public static List<FoodItemModel> foodItemModels;
+
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -58,9 +58,7 @@ public class CustomerHome extends AppCompatActivity {
         navigation.setSelectedItemId(R.id.navigation_home);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        if (foodItemModels==null){
-            foodItemModels=new ArrayList<>();
-        }
+
 
 
         myFab = (FloatingActionButton) findViewById(R.id.floating_button);

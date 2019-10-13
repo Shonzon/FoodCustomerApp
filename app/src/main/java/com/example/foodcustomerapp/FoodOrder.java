@@ -1,5 +1,6 @@
 package com.example.foodcustomerapp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -9,6 +10,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +25,13 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.example.foodcustomerapp.Model.FoodItemModel;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -41,6 +50,8 @@ public class FoodOrder extends AppCompatActivity implements CompoundButton.OnChe
     Button confirmButton;
     CheckBox[] checkBoxes;
     String zoneName;
+    private FirebaseAuth mAuth;
+    public static List<FoodItemModel> foodItemModels;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,11 +66,14 @@ public class FoodOrder extends AppCompatActivity implements CompoundButton.OnChe
             }
         });
 
+        mAuth = FirebaseAuth.getInstance();
         zoneName=getIntent().getStringExtra("zoneName");
         foodlayout=(TableLayout)findViewById(R.id.foodLayout);
         confirmButton=(Button)findViewById(R.id.button_confirm);
         checkBoxes=new CheckBox[foodItem.length];
-        foodItemInitialize();
+        if (foodItemModels==null){
+            foodItemModels=new ArrayList<>();
+        }
 
 
 
@@ -68,7 +82,12 @@ public class FoodOrder extends AppCompatActivity implements CompoundButton.OnChe
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                DatabaseReference databaseReference= FirebaseDatabase.getInstance().getReference("Cart")
+                        .child(zoneName)
+                        .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                databaseReference.removeValue();
                 Intent i = new Intent(FoodOrder.this,Cart.class);
+                i.putExtra("zoneName",zoneName);
                 i.addFlags(i.FLAG_ACTIVITY_CLEAR_TOP | i.FLAG_ACTIVITY_CLEAR_TASK |i.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(i);
                 overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
@@ -156,12 +175,12 @@ public class FoodOrder extends AppCompatActivity implements CompoundButton.OnChe
             food.setItemid(compoundButton.getId());
             food.setItemName(compoundButton.getText().toString());
             food.setItemPrice(foodItem[compoundButton.getId()][1]);
-            CustomerHome.foodItemModels.add(food);
+            foodItemModels.add(food);
         } else {
-            if (CustomerHome.foodItemModels!=null){
-                for (int i=0;i<CustomerHome.foodItemModels.size();i++){
-                    if (CustomerHome.foodItemModels.get(i).getItemid()==compoundButton.getId()){
-                        CustomerHome.foodItemModels.remove(CustomerHome.foodItemModels.get(i));
+            if (foodItemModels!=null){
+                for (int i=0;i<foodItemModels.size();i++){
+                    if (foodItemModels.get(i).getItemid()==compoundButton.getId()){
+                        foodItemModels.remove(foodItemModels.get(i));
                     }
                 }
             }
