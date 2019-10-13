@@ -74,9 +74,6 @@ public class FoodOrder extends AppCompatActivity implements CompoundButton.OnChe
         if (foodItemModels==null){
             foodItemModels=new ArrayList<>();
         }
-
-
-
         foodItemInitialize();
 
         confirmButton.setOnClickListener(new View.OnClickListener() {

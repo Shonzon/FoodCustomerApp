@@ -66,20 +66,22 @@ public class Cart extends AppCompatActivity implements FoodItemAdapter.OnAdapter
         radioGroup = (RadioGroup) findViewById(R.id.time_Order_rad);
         mAuth = FirebaseAuth.getInstance();
         mDatabase= FirebaseDatabase.getInstance().getReference();
-        zoneName=getIntent().getStringExtra("zoneName");
+
 
 
 
         Calendar calendar = Calendar.getInstance();
         current_date.setText(new SimpleDateFormat("dd-MMM-yyyy").format(calendar.getTime()));
 
-        if (FoodOrder.foodItemModels==null){
-            DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Cart");
+        if (FoodOrder.foodItemModels==null || FoodOrder.foodItemModels.size()<1){
+            DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Cart").child("Basundhara");
             ref.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     FoodOrder.foodItemModels=new ArrayList<>();
                     for (DataSnapshot ds:dataSnapshot.getChildren()){
+                        FoodItemModel foodItemModel=ds.getValue(FoodItemModel.class);
+                        FoodOrder.foodItemModels.add(foodItemModel);
 
                     }
                 }
@@ -88,15 +90,13 @@ public class Cart extends AppCompatActivity implements FoodItemAdapter.OnAdapter
 
                 }
             });
+
+            zoneName="Basundhara";
+            loadRecycleView(FoodOrder.foodItemModels);
         }else {
-
+            zoneName=getIntent().getStringExtra("zoneName");
+            loadRecycleView(FoodOrder.foodItemModels);
         }
-
-        loadRecycleView(FoodOrder.foodItemModels);
-        foodItemAdapter.setMlistener(Cart.this);
-
-
-
 
         order_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,6 +142,7 @@ public class Cart extends AppCompatActivity implements FoodItemAdapter.OnAdapter
             recyclerView.scrollToPosition(0);
             foodItemAdapter.notifyDataSetChanged();
             total_taka.setText(getTotal_Taka(tlist)+" Tk");
+            foodItemAdapter.setMlistener(this);
         }else {
 
         }
