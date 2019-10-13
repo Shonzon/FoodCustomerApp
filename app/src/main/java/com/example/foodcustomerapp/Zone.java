@@ -52,4 +52,12 @@ public class Zone extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onBackPressed() {
+        Intent i = new Intent(Zone.this,CustomerHome.class);
+        i.addFlags(i.FLAG_ACTIVITY_CLEAR_TOP | i.FLAG_ACTIVITY_CLEAR_TASK |i.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(i);
+        overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+    }
 }
