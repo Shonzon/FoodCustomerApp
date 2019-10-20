@@ -51,7 +51,7 @@ public class FoodOrder extends AppCompatActivity implements CompoundButton.OnChe
     CheckBox[] checkBoxes;
     String zoneName;
     private FirebaseAuth mAuth;
-    public static List<FoodItemModel> foodItemModels;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,16 +71,14 @@ public class FoodOrder extends AppCompatActivity implements CompoundButton.OnChe
         foodlayout=(TableLayout)findViewById(R.id.foodLayout);
         confirmButton=(Button)findViewById(R.id.button_confirm);
         checkBoxes=new CheckBox[foodItem.length];
-        if (foodItemModels==null){
-            foodItemModels=new ArrayList<>();
-        }
+        CustomerHome.foodItemModels=new ArrayList<>();
+
         foodItemInitialize();
 
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 DatabaseReference databaseReference= FirebaseDatabase.getInstance().getReference("Cart")
-                        .child(zoneName)
                         .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
                 databaseReference.removeValue();
                 Intent i = new Intent(FoodOrder.this,Cart.class);
@@ -172,12 +170,12 @@ public class FoodOrder extends AppCompatActivity implements CompoundButton.OnChe
             food.setItemid(compoundButton.getId());
             food.setItemName(compoundButton.getText().toString());
             food.setItemPrice(foodItem[compoundButton.getId()][1]);
-            foodItemModels.add(food);
+            CustomerHome.foodItemModels.add(food);
         } else {
-            if (foodItemModels!=null){
-                for (int i=0;i<foodItemModels.size();i++){
-                    if (foodItemModels.get(i).getItemid()==compoundButton.getId()){
-                        foodItemModels.remove(foodItemModels.get(i));
+            if (CustomerHome.foodItemModels!=null){
+                for (int i=0;i<CustomerHome.foodItemModels.size();i++){
+                    if (CustomerHome.foodItemModels.get(i).getItemid()==compoundButton.getId()){
+                        CustomerHome.foodItemModels.remove(CustomerHome.foodItemModels.get(i));
                     }
                 }
             }

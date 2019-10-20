@@ -17,6 +17,7 @@ public class Zone extends AppCompatActivity {
 
     RadioGroup radioGroup;
     private RadioButton radioButton;
+    static boolean checkzone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,11 +42,21 @@ public class Zone extends AppCompatActivity {
                 // If the radiobutton that has changed in check state is now checked...
                 if (isChecked)
                 {
-                    Intent intent = new Intent(Zone.this, FoodOrder.class);
-                    intent.putExtra("zoneName",radioButton.getText().toString().trim());
-                    intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP | intent.FLAG_ACTIVITY_CLEAR_TASK |intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+                    if (checkzone==false){
+                        Intent intent = new Intent(Zone.this, FoodOrder.class);
+                        intent.putExtra("zoneName",radioButton.getText().toString().trim());
+                        intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP | intent.FLAG_ACTIVITY_CLEAR_TASK |intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                        overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+                    }else {
+                        checkzone=false;
+                        Intent intent = new Intent(Zone.this, Cart.class);
+                        intent.putExtra("zoneName",radioButton.getText().toString().trim());
+                        intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP | intent.FLAG_ACTIVITY_CLEAR_TASK |intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                        overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+                    }
+
                 }
 
 

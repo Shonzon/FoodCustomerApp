@@ -19,11 +19,6 @@
         <activity android:name=".Zone" />
         <activity android:name=".Cart" />
         <activity android:name=".FoodOrder" />
-        <activity
-            android:name=".Main2Activity"
-            android:label="@string/title_activity_main2"
-            android:theme="@style/NoActionBar" />
-        <activity android:name=".DashBoard" />
         <activity android:name=".CustomerHome" />
         <activity android:name=".Login" />
         <activity
@@ -37,5 +32,4 @@
             </intent-filter>
         </activity>
     </application>
-
 </manifest>

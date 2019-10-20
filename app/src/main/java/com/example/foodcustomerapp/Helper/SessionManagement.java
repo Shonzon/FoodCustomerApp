@@ -65,7 +65,6 @@ public class SessionManagement {
         user.put(KEY_CustomerNo, pref.getString(KEY_CustomerNo, null));
         user.put(KEY_CustomerId, pref.getString(KEY_CustomerId, null));
         user.put(KEY_CustomerName, pref.getString(KEY_CustomerName, null));
-
         // return user
         return user;
     }

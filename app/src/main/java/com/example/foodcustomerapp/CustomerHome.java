@@ -18,6 +18,7 @@ import java.util.List;
 public class CustomerHome extends AppCompatActivity {
 
     FloatingActionButton myFab;
+    public static List<FoodItemModel> foodItemModels;
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -44,6 +45,12 @@ public class CustomerHome extends AppCompatActivity {
                     startActivity(zone);
                     overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
                     break;
+                case R.id.navigation_profile:
+                    Intent profile = new Intent(getApplicationContext(),Profile.class);
+                    profile.addFlags(profile.FLAG_ACTIVITY_CLEAR_TOP | profile.FLAG_ACTIVITY_CLEAR_TASK |profile.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(profile);
+                    overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+                    break;
             }
             return false;
         }
@@ -57,6 +64,10 @@ public class CustomerHome extends AppCompatActivity {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         navigation.setSelectedItemId(R.id.navigation_home);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        if (foodItemModels==null){
+            foodItemModels=new ArrayList<>();
+        }
 
 
 

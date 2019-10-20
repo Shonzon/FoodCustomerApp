@@ -2,7 +2,7 @@ package com.example.foodcustomerapp.Adapter;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Typeface;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.foodcustomerapp.Model.FoodItemModel;
 import com.example.foodcustomerapp.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class FoodItemAdapter extends RecyclerView.Adapter<FoodItemAdapter.FoodViewHolder> {

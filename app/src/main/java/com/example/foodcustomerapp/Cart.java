@@ -8,6 +8,9 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -45,6 +48,7 @@ public class Cart extends AppCompatActivity implements FoodItemAdapter.OnAdapter
     private DatabaseReference mDatabase;
     private FirebaseAuth mAuth;
     String zoneName;
+    private ProgressDialog progressDoalog;
 
 
     @Override
@@ -66,36 +70,38 @@ public class Cart extends AppCompatActivity implements FoodItemAdapter.OnAdapter
         radioGroup = (RadioGroup) findViewById(R.id.time_Order_rad);
         mAuth = FirebaseAuth.getInstance();
         mDatabase= FirebaseDatabase.getInstance().getReference();
+        progressDoalog = new ProgressDialog(Cart.this);
+        progressDoalog.setMessage("Loading.... Please Wait");
+        progressDoalog.setCanceledOnTouchOutside(false);
+        progressDoalog.show();
 
-
-
+        zoneName=getIntent().getStringExtra("zoneName");
 
         Calendar calendar = Calendar.getInstance();
         current_date.setText(new SimpleDateFormat("dd-MMM-yyyy").format(calendar.getTime()));
 
-        if (FoodOrder.foodItemModels==null || FoodOrder.foodItemModels.size()<1){
-            DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Cart").child("Basundhara");
-            ref.addListenerForSingleValueEvent(new ValueEventListener() {
+        if (CustomerHome.foodItemModels==null || CustomerHome.foodItemModels.size()<1){
+            DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Cart").child(mAuth.getCurrentUser().getUid());
+            ref.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    FoodOrder.foodItemModels=new ArrayList<>();
                     for (DataSnapshot ds:dataSnapshot.getChildren()){
                         FoodItemModel foodItemModel=ds.getValue(FoodItemModel.class);
-                        FoodOrder.foodItemModels.add(foodItemModel);
-
+                        CustomerHome.foodItemModels.add(foodItemModel);
                     }
+                    loadRecycleView(CustomerHome.foodItemModels);
+                    foodItemAdapter.notifyDataSetChanged();
+                    progressDoalog.dismiss();
                 }
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                    progressDoalog.dismiss();
                 }
             });
 
-            zoneName="Basundhara";
-            loadRecycleView(FoodOrder.foodItemModels);
         }else {
-            zoneName=getIntent().getStringExtra("zoneName");
-            loadRecycleView(FoodOrder.foodItemModels);
+            progressDoalog.dismiss();
+            loadRecycleView(CustomerHome.foodItemModels);
         }
 
         order_confirm.setOnClickListener(new View.OnClickListener() {
@@ -107,20 +113,57 @@ public class Cart extends AppCompatActivity implements FoodItemAdapter.OnAdapter
                 }
                 else
                 {
-                    if (FoodOrder.foodItemModels!=null){
-                        radioButton = (RadioButton) findViewById(radioGroup.getCheckedRadioButtonId());
-
-                        for (int k=0;k<FoodOrder.foodItemModels.size();k++){
-                            mDatabase.child("Orders")
-                                    .child(zoneName)
-                                    .child(current_date.getText().toString())
-                                    .child(radioButton.getText().toString())
-                                    .child(mAuth.getCurrentUser().getUid())
-                                    .child("preOrders")
-                                    .child(randomAlphaNumeric()).setValue(FoodOrder.foodItemModels.get(k));
+                    radioButton = (RadioButton) findViewById(radioGroup.getCheckedRadioButtonId());
+                    if (CustomerHome.foodItemModels!=null && CustomerHome.foodItemModels.size()>0){
+                        if (zoneName!=null){
+                            AlertDialog.Builder b=  new  AlertDialog.Builder(Cart.this)
+                                    .setTitle("ARE YOU SURE ? ")
+                                    .setPositiveButton("OK",
+                                            new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int whichButton) {
+                                                    DatabaseReference databaseReference= FirebaseDatabase.getInstance().getReference("Cart")
+                                                            .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                                                    databaseReference.removeValue();
+                                                    for (int k=0;k<CustomerHome.foodItemModels.size();k++){
+                                                        mDatabase.child("Orders")
+                                                                .child(zoneName)
+                                                                .child(current_date.getText().toString())
+                                                                .child(radioButton.getText().toString())
+                                                                .child(mAuth.getCurrentUser().getUid())
+                                                                .child("preOrders")
+                                                                .child(randomAlphaNumeric()).setValue(CustomerHome.foodItemModels.get(k));
+                                                    }
+                                                    Intent i = new Intent(Cart.this,CustomerHome.class);
+                                                    i.addFlags(i.FLAG_ACTIVITY_CLEAR_TOP | i.FLAG_ACTIVITY_CLEAR_TASK |i.FLAG_ACTIVITY_NEW_TASK);
+                                                    startActivity(i);
+                                                    overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+                                                }
+                                            }
+                                    )
+                                    .setNegativeButton("Cancel",
+                                            new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int whichButton) {
+                                                    dialog.dismiss();
+                                                }
+                                            }
+                                    );
+                            b.show();
+                            Zone.checkzone=false;
+                        }else {
+                            addToCart();
+                            CustomerHome.foodItemModels.clear();
+                            Zone.checkzone=true;
+                            Intent i = new Intent(Cart.this,Zone.class);
+                            i.addFlags(i.FLAG_ACTIVITY_CLEAR_TOP | i.FLAG_ACTIVITY_CLEAR_TASK |i.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(i);
+                            overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
                         }
                     }else {
-
+                        Zone.checkzone=false;
+                        Intent i = new Intent(Cart.this,Zone.class);
+                        i.addFlags(i.FLAG_ACTIVITY_CLEAR_TOP | i.FLAG_ACTIVITY_CLEAR_TASK |i.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(i);
+                        overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
                     }
 
                 }
@@ -158,7 +201,7 @@ public class Cart extends AppCompatActivity implements FoodItemAdapter.OnAdapter
     @Override
     public void onBackPressed() {
         addToCart();
-        Intent i = new Intent(Cart.this,CustomerHome.class);
+        Intent i = new Intent(Cart.this,FoodOrder.class);
         i.addFlags(i.FLAG_ACTIVITY_CLEAR_TOP | i.FLAG_ACTIVITY_CLEAR_TASK |i.FLAG_ACTIVITY_NEW_TASK);
         startActivity(i);
         overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
@@ -168,10 +211,10 @@ public class Cart extends AppCompatActivity implements FoodItemAdapter.OnAdapter
         removeAt(position);
     }
     public void removeAt(int position) {
-        FoodOrder.foodItemModels.remove(position);
-        total_taka.setText(getTotal_Taka(FoodOrder.foodItemModels)+" Tk");
+        CustomerHome.foodItemModels.remove(position);
+        total_taka.setText(getTotal_Taka(CustomerHome.foodItemModels)+" Tk");
         foodItemAdapter.notifyItemRemoved(position);
-        foodItemAdapter.notifyItemRangeChanged(position, FoodOrder.foodItemModels.size());
+        foodItemAdapter.notifyItemRangeChanged(position, CustomerHome.foodItemModels.size());
 
     }
 
@@ -186,15 +229,16 @@ public class Cart extends AppCompatActivity implements FoodItemAdapter.OnAdapter
         return builder.toString();
     }
     private void addToCart(){
-        if (FoodOrder.foodItemModels.size()>0){
-            for (int k=0;k<FoodOrder.foodItemModels.size();k++){
+        DatabaseReference databaseReference= FirebaseDatabase.getInstance().getReference("Cart")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        databaseReference.removeValue();
+        if (CustomerHome.foodItemModels.size()>0){
+            for (int k=0;k<CustomerHome.foodItemModels.size();k++){
                 mDatabase.child("Cart")
-                        .child(zoneName)
                         .child(mAuth.getCurrentUser().getUid())
-                        .child(randomAlphaNumeric()).setValue(FoodOrder.foodItemModels.get(k));
+                        .child(randomAlphaNumeric()).setValue(CustomerHome.foodItemModels.get(k));
             }
         }
-        FoodOrder.foodItemModels.clear();
     }
 
 }

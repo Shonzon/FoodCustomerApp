@@ -123,8 +123,6 @@ public class Login extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         UserModel users=dataSnapshot.getValue(UserModel.class);
-                        session.createLoginSession(user.getUid(),users.getUserName(),users.getUserPhoneNumber());
-                        System.out.println(users.getUserName());
                     }
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
